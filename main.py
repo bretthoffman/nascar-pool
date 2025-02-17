@@ -119,7 +119,16 @@ if page == "Register & Pick":
     st.title("Fantasy NASCAR Registration")
     user_choice = st.selectbox("Who are you?", ["New Member"] + list(data["teams"].keys()))
     
-    if user_choice != "New Member":
+    if user_choice == "New Member":
+        team_name = st.text_input("Enter your team name:")
+        if team_name:
+            data["teams"][team_name] = {"score": 0, "picks": []}
+            save_data(data)
+            st.success(f"Welcome {team_name}! You can now select your driver.")
+        else:
+            st.warning("Please enter a team name.")
+
+    elif user_choice != "New Member":
         if upcoming_race:
             st.subheader(race_status)
             st.write(f"{upcoming_race['name']}")
@@ -179,3 +188,4 @@ elif page == "Leaderboard":
                 st.success("Leaderboard updated with race results!")
     else:
         st.write("Race has not started yet or is still in progress.")
+
